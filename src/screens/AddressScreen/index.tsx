@@ -13,6 +13,9 @@ import countries from 'country-list';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import ErrorMsg from '../../components/ErrorMsg';
+import {Order, OrderProduct, CartProduct} from '../../models';
+import {Auth, DataStore} from 'aws-amplify';
+import {useNavigation} from '@react-navigation/native';
 
 interface ICountry {
   code: string;
@@ -36,7 +39,7 @@ function AddressScreen() {
     city: '',
     zip: '',
   });
-
+  const navigation = useNavigation();
   const countryList = countries.getData();
 
   const handleOnchange = (text: string, name: string) => {
@@ -48,7 +51,7 @@ function AddressScreen() {
     setError(prevState => ({...prevState, [name]: error}));
   }
 
-  function handleUseThisAddressPress() {
+  function handleCheckout() {
     let isValid = true;
     if (!inputs.name) {
       handleError('name', 'Name is required');
@@ -74,6 +77,51 @@ function AddressScreen() {
     if (isValid) {
       console.log('Success');
     }
+
+    onSaveOrder();
+  }
+
+  async function onSaveOrder() {
+    // get user details
+    const userData = await Auth.currentAuthenticatedUser();
+    // create a new order
+    console.log(userData.attributes.sub);
+
+    const newOrder = await DataStore.save(
+      new Order({
+        userSub: userData.attributes.sub,
+        fullName: inputs.name,
+        phoneNumber: inputs.phone,
+        country: countrySelected,
+        city: inputs.city,
+        address: inputs.address,
+      }),
+    );
+
+    // fetch all cart items
+    const cartItems = await DataStore.query(CartProduct, cp =>
+      cp.userSub('eq', userData.attributes.sub),
+    );
+
+    // attach all cart items to the order
+    await Promise.all(
+      cartItems.map(cartItem =>
+        DataStore.save(
+          new OrderProduct({
+            quantity: cartItem.quantity,
+            option: cartItem.option,
+            productID: cartItem.productID,
+            orderID: newOrder.id,
+          }),
+        ),
+      ),
+    );
+
+    // delete all cart items
+    await Promise.all(cartItems.map(cartItem => DataStore.delete(cartItem)));
+
+    // redirect home
+    navigation.navigate('home');
   }
 
   return (
@@ -168,7 +216,11 @@ function AddressScreen() {
           </View>
         </View>
 
-        <Button text="Use this address" onPress={handleUseThisAddressPress} />
+        <Button
+          text="Checkout"
+          onPress={handleCheckout}
+          containerStyles={styles.checkoutBtn}
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );

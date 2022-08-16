@@ -9,7 +9,7 @@ interface IProductItem {
     id: string;
     title: string;
     image: string;
-    avgRating: number;
+    avgRating?: number;
     ratings: number;
     price: number;
     oldPrice?: number;
@@ -39,7 +39,13 @@ function ProductItem({item}: IProductItem) {
               <FontAwesome
                 key={`${item.id}-${index}`}
                 style={styles.star}
-                name={index < Math.floor(item.avgRating) ? 'star' : 'star-o'}
+                name={
+                  item.avgRating
+                    ? index < Math.floor(item?.avgRating)
+                      ? 'star'
+                      : 'star-o'
+                    : 'star-o'
+                }
                 size={18}
                 color={'#e47911'}
               />
@@ -48,9 +54,9 @@ function ProductItem({item}: IProductItem) {
           <Text>{item.ratings}</Text>
         </View>
         <Text style={styles.price}>
-          from ${item.price}
+          from ${item.price.toFixed(2)}
           {item.oldPrice && (
-            <Text style={styles.oldPrice}>${item.oldPrice}</Text>
+            <Text style={styles.oldPrice}>${item.oldPrice.toFixed(2)}</Text>
           )}
         </Text>
       </View>

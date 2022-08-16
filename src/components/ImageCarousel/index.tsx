@@ -27,11 +27,13 @@ function ImageCarousel({images}: IImageCarousel) {
       <FlatList
         data={images}
         renderItem={({item, index}) => (
-          <Image
-            key={index}
-            style={[styles.image, {width: windowWidth - 20}]}
-            source={{uri: item}}
-          />
+          <View key={index}>
+            <Image
+              key={index}
+              style={[styles.image, {width: windowWidth - 20}]}
+              source={{uri: item}}
+            />
+          </View>
         )}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -46,6 +48,7 @@ function ImageCarousel({images}: IImageCarousel) {
       <View style={styles.dots}>
         {images.map((image, index) => (
           <View
+            key={index}
             style={[
               styles.dot,
               // eslint-disable-next-line react-native/no-inline-styles

@@ -8,9 +8,14 @@
  * @format
  */
 
-import React from 'react';
+import * as React from 'react';
 import {SafeAreaView, StatusBar, useColorScheme, View} from 'react-native';
 import Router from './src/router';
+import {Amplify} from 'aws-amplify';
+import {withAuthenticator} from 'aws-amplify-react-native';
+// import '@aws-amplify/ui-react/styles.css';
+import awsconfig from './src/aws-exports';
+Amplify.configure(awsconfig);
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -25,4 +30,5 @@ const App = () => {
   );
 };
 
-export default App;
+export default withAuthenticator(App);
+// export default App;

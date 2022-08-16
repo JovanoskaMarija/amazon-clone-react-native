@@ -1,19 +1,21 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import {View, Text, Pressable} from 'react-native';
 import {styles} from './styles';
 
 interface IQuantitySelector {
   quantity: number;
-  setQuantity: Dispatch<SetStateAction<number>>;
+  handleQuantityUpdate: (newQuantity: number) => void;
 }
 
-function QuantitySelector({quantity, setQuantity}: IQuantitySelector) {
+function QuantitySelector({quantity, handleQuantityUpdate}: IQuantitySelector) {
   function onMinus() {
-    setQuantity(quantity - 1);
+    const newQuantity = quantity - 1;
+    handleQuantityUpdate(newQuantity);
   }
 
   function onPlus() {
-    setQuantity(quantity + 1);
+    const newQuantity = quantity + 1;
+    handleQuantityUpdate(newQuantity);
   }
   return (
     <View style={styles.root}>

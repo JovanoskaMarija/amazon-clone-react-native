@@ -1,8 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import ProductItem from '../../components/ProductItem';
-import products from '../../data/products';
-function HomeScreen({searchValue: string}) {
+import {DataStore} from 'aws-amplify';
+import {Product} from '../../models';
+
+function HomeScreen() {
+  const [products, setProducts] = useState<Product[] | []>([]);
+
+  useEffect(() => {
+    DataStore.query(Product).then(data => {
+      setProducts(data);
+    });
+  }, []);
+
   return (
     <View style={styles.page}>
       <FlatList

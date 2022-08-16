@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     borderColor: '#d1d1d1',
     backgroundColor: '#ffffff',
     padding: 10,
+    marginBottom: 20,
   },
   container: {
     flexDirection: 'row',

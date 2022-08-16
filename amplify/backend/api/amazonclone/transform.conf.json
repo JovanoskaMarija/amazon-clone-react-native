@@ -1,0 +1,1 @@
+{ "Version": 5, "ResolverConfig": { "project": { "ConflictHandler": "AUTOMERGE", "ConflictDetection": "VERSION" } } }

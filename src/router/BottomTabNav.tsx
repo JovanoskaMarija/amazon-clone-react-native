@@ -4,6 +4,7 @@ import HomeScreen from '../screens/HomeScreen';
 import Entypo from 'react-native-vector-icons/Entypo';
 import HomeStack from './HomeStack';
 import ShoppingCardStack from './ShoppingCardStack';
+import MenuScreen from '../screens/MenuScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +45,7 @@ function BottomTabNav() {
         }}
       />
       <Tab.Screen
-        component={HomeScreen}
+        component={MenuScreen}
         name="more"
         options={{
           tabBarIcon: ({color}) => {

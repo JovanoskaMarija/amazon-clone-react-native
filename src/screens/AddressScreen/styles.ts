@@ -24,4 +24,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
+  checkoutBtn: {
+    marginBottom: 50,
+  },
 });
